@@ -1,7 +1,7 @@
 stages:
     - runDASTScanUsingZAP
 
-run-dast-job:
+run-dast-jobs:
     stage: runDASTScanUsingZAP
     image: maven:3.8.5-openjdk-17-slim
     script: |
