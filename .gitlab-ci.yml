@@ -1,17 +1,1 @@
-stages:
-    - runDASSTScanUsingZAP
 
-run-dast-jobs:
-    stage: runDASTScanUsingZAP
-    image: maven:3.8.5-openjdk-17-slim
-    script: |
-      apt-get update
-      apt-get -y install wget
-      wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
-      mkdir zap
-      tar -xvf ZAP_2.14.0_Linux.tar.gz
-      cd ZAP_2.14.0
-      ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout ../zap_report.html 
-    artifacts:
-      paths:
-        - zap_report.html
