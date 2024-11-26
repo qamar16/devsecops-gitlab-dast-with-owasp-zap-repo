@@ -1,0 +1,39 @@
+name: Run DAST with OWASP ZAP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  run-dast:
+    name: Run DAST Scan Using OWASP ZAP
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code (optional, if required)
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Install OWASP ZAP
+      - name: Install OWASP ZAP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget
+          wget https://github.com/zaproxy/zaproxy/releases/download/v2.14.0/ZAP_2.14.0_Linux.tar.gz
+          mkdir zap
+          tar -xvf ZAP_2.14.0_Linux.tar.gz -C zap
+
+      # Run ZAP scan
+      - name: Run ZAP DAST Scan
+        run: |
+          cd zap/ZAP_2.14.0
+          ./zap.sh -cmd -quickurl https://www.example.com -quickprogress -quickout zap_report.html
+
+      # Upload ZAP report
+      - name: Upload ZAP Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-report
+          path: zap/ZAP_2.14.0/zap_report.html
